@@ -16,11 +16,10 @@ describe 'ActiveRecord Obstacle Course, Week 1' do
     orders_of_500 = Order.all.select { |order| order.amount == 500 }
     orders_of_200 = Order.all.select { |order| order.amount == 200 }
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    orders_of_500 = Order.orders_of_amount(500)
+    orders_of_200 = Order.orders_of_amount(200)
     # ------------------------------------------------------------
-
     # Expectation
     expect(orders_of_500.count).to eq(1)
     expect(orders_of_200.count).to eq(1)
@@ -30,12 +29,10 @@ describe 'ActiveRecord Obstacle Course, Week 1' do
     # ----------------------- Using Raw SQL ----------------------
     order_id = ActiveRecord::Base.connection.execute('SELECT id FROM orders ORDER BY amount ASC LIMIT 1').first['id']
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    order_id = Order.smallest_order_id
     # Your solution should not contain the ID of the order anywhere
     # ------------------------------------------------------------
-
     # Expectation
     expect(order_id).to eq(@order_1.id)
   end
@@ -44,12 +41,10 @@ describe 'ActiveRecord Obstacle Course, Week 1' do
     # ----------------------- Using Raw SQL ----------------------
     order_id = ActiveRecord::Base.connection.execute('SELECT id FROM orders ORDER BY amount DESC LIMIT 1').first['id']
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    order_id = Order.largest_order_id
     # Your solution should not contain the ID of the order anywhere
     # ------------------------------------------------------------
-
     # Expectation
     expect(order_id).to eq(@order_15.id)
   end
@@ -64,11 +59,10 @@ describe 'ActiveRecord Obstacle Course, Week 1' do
       order.amount == 700 || order.amount == 1000
     end
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    orders_of_500_and_700 = Order.orders_of_amounts(500, 700)
+    orders_of_700_and_1000 = Order.orders_of_amounts(700, 1000)
     # ------------------------------------------------------------
-
     # Expectation
     expect(orders_of_500_and_700.count).to eq(2)
     expect(orders_of_700_and_1000.count).to eq(2)
@@ -77,30 +71,24 @@ describe 'ActiveRecord Obstacle Course, Week 1' do
   it '5. finds multiple items by id' do
     ids_to_find = [@item_1.id, @item_2.id, @item_4.id]
     expected_objects = [@item_1, @item_4, @item_2]
-
     # ----------------------- Using Ruby -------------------------
     items = Item.all.select { |item| ids_to_find.include?(item.id) }
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    items = Item.find_by_ids(Item, ids_to_find)
     # ------------------------------------------------------------
-
     # Expectation
     expect(items).to eq(expected_objects)
   end
 
   it '6. finds multiple orders by id' do
     ids_to_find = [@order_1.id, @order_3.id, @order_5.id, @order_7.id]
-
     # ----------------------- Using Ruby -------------------------
     orders = Order.all.select { |order| ids_to_find.include?(order.id) }
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    orders = Order.find_by_ids(Order, ids_to_find)
     # ------------------------------------------------------------
-
     # Expectation
     expect(orders).to eq([@order_3, @order_5, @order_1, @order_7])
   end
@@ -110,26 +98,21 @@ describe 'ActiveRecord Obstacle Course, Week 1' do
     # ----------------------- Using Ruby -------------------------
     orders_between_700_and_1000 = Order.all.select { |order| order.amount >= 700 && order.amount <= 1000 }
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    orders_between_700_and_1000 = Order.orders_in_amount_range(700, 1000)
     # ------------------------------------------------------------
-
     # Expectation
     expect(orders_between_700_and_1000).to eq(expected_result)
   end
 
   it '8. finds orders with an amount less than 550' do
     expected_result = [@order_3, @order_2, @order_1, @order_4]
-
     # ----------------------- Using Ruby -------------------------
     orders_less_than_550 = Order.all.select { |order| order.amount < 550 }
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    orders_less_than_500 = Order.orders_less_than(500)
     # ------------------------------------------------------------
-
     # Expectation
     expect(orders_less_than_550).to eq(expected_result)
   end
