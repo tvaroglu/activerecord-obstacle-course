@@ -5,6 +5,10 @@ class Order < ApplicationRecord
   has_many :items, through: :order_items
 
 
+  def self.average_amount
+    average(:amount)
+  end
+
   def self.orders_of_amount(x)
     where(amount: x)
   end
@@ -39,6 +43,10 @@ class Order < ApplicationRecord
 
   def items_by_name
     items.order(:name)
+  end
+
+  def item_names_for_order
+    items.pluck(:name)
   end
 
 end

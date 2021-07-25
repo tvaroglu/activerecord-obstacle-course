@@ -17,7 +17,7 @@ describe 'ActiveRecord Obstacle Course, Week 2' do
     orders_of_user_3 = Order.all.select { |order| order.user_id == @user_3.id }
     # ------------------------------------------------------------
     # ------------------ Using ActiveRecord ----------------------
-    orders_of_user_3 = @user_3.orders_of_user(@user_3.id)
+    orders_of_user_3 = @user_3.orders
     # ------------------------------------------------------------
     # Expectation
     expect(orders_of_user_3).to eq(expected_result)

@@ -13,7 +13,6 @@ describe 'ActiveRecord Obstacle Course, Week 3' do
 
   it '16. returns the names of users who ordered one specific item' do
     expected_result = [@user_2.name, @user_3.name, @user_1.name]
-
     # ----------------------- Using Raw SQL-----------------------
     users = ActiveRecord::Base.connection.execute("
       select
@@ -25,33 +24,27 @@ describe 'ActiveRecord Obstacle Course, Week 3' do
       ORDER BY users.name")
     users = users.map {|u| u['name']}
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    users = User.user_names_for_item_order(@item_8.id)
     # ------------------------------------------------------------
-
     # Expectation
     expect(users).to eq(expected_result)
   end
 
   it '17. returns the name of items associated with a specific order' do
     expected_result = ['Abercrombie', 'Giorgio Armani', 'J.crew', 'Fox']
-
     # ----------------------- Using Ruby -------------------------
     names = Order.last.items.all.map(&:name)
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    names = Order.last.item_names_for_order
     # ------------------------------------------------------------
-
     # Expectation
     expect(names.sort).to eq(expected_result.sort)
   end
 
   it '18. returns the names of items for a users order' do
     expected_result = ['Giorgio Armani', 'Banana Republic', 'Izod', 'Fox']
-
     # ----------------------- Using Ruby -------------------------
     items_for_user_3_third_order = []
     grouped_orders = []
@@ -64,11 +57,9 @@ describe 'ActiveRecord Obstacle Course, Week 3' do
       items_for_user_3_third_order = order.items.map(&:name) if idx == 2
     end
     # ------------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    items_for_user_3_third_order = @user_3.item_names_for_order(grouped_orders[2].id)
     # ------------------------------------------------------------
-
     # Expectation
     expect(items_for_user_3_third_order.sort).to eq(expected_result.sort)
   end
@@ -77,11 +68,9 @@ describe 'ActiveRecord Obstacle Course, Week 3' do
     # ---------------------- Using Ruby -------------------------
     average = (Order.all.map(&:amount).inject(:+)) / (Order.count)
     # -----------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    average = Order.average_amount
     # ------------------------------------------------------------
-
     # Expectation
     expect(average).to eq(650)
   end
@@ -91,14 +80,11 @@ describe 'ActiveRecord Obstacle Course, Week 3' do
     orders = Order.all.map do |order|
       order if order.user_id == @user_3.id
     end.select{|i| !i.nil?}
-
     average = (orders.map(&:amount).inject(:+)) / (orders.count)
     # -----------------------------------------------------------
-
     # ------------------ Using ActiveRecord ----------------------
-    # Solution goes here
+    average = @user_3.average_order_amount
     # ------------------------------------------------------------
-
     # Expectation
     expect(average.to_i).to eq(749)
   end
