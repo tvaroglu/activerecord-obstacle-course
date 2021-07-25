@@ -17,4 +17,11 @@ class Item < ApplicationRecord
     where.not(id: items_array.pluck(:id))
   end
 
+  def self.ordered_items
+    joins(:order_items)
+    # .where.not(order_items: { item_id: nil })
+    .order(:name)
+    .distinct
+  end
+
 end

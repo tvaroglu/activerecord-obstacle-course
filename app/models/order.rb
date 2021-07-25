@@ -5,6 +5,15 @@ class Order < ApplicationRecord
   has_many :items, through: :order_items
 
 
+  def self.total_sales
+    sum(:amount)
+  end
+
+  def self.total_sales_excluding_user(user_id)
+    where.not(user_id: user_id)
+    .sum(:amount)
+  end
+
   def self.average_amount
     average(:amount)
   end
@@ -39,6 +48,19 @@ class Order < ApplicationRecord
     order(amount: :desc)
     .first
     .id
+  end
+
+  def self.orders_that_include_item(item_id)
+    joins(:order_items)
+    .where("order_items.item_id = ?", item_id)
+    .distinct
+  end
+
+  def self.orders_for_user_by_item(user_id, item_id)
+    joins(:order_items)
+    .where(user_id: user_id)
+    .where("order_items.item_id = ?", item_id)
+    .distinct
   end
 
   def items_by_name
