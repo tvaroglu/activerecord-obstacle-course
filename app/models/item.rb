@@ -24,4 +24,8 @@ class Item < ApplicationRecord
     .distinct
   end
 
+  def self.ordered_item_names
+    ordered_items.pluck(:name)
+  end
+
 end

@@ -18,10 +18,8 @@ describe 'ActiveRecord Obstacle Course, Week 5' do
 
     unordered_items = [unordered_item_1, unordered_item_2, unordered_item_3, @item_6.name]
     expected_result = ['Abercrombie', 'Banana Republic', 'Calvin Klein', 'Dickies', 'Eddie Bauer', 'Fox', 'Giorgio Armani', 'Izod', 'J.crew']
-
     # ----------------------- Using Ruby -------------------------
     items = Item.all
-
     ordered_items = items.map do |item|
       item if item.orders.present?
     end.compact
@@ -29,13 +27,11 @@ describe 'ActiveRecord Obstacle Course, Week 5' do
     ordered_items_names = ordered_items.map(&:name)
     ordered_items_names.sort
     # ------------------------------------------------------------
-
     # ------------------ ActiveRecord Solution ----------------------
-    # Solution goes here
     # When you find a solution, experiment with adjusting your method chaining
     # Which ones are you able to switch around without relying on Ruby's Enumerable methods?
+    ordered_item_names = Item.ordered_item_names
     # ---------------------------------------------------------------
-
     # Expectations
     expect(ordered_items_names).to eq(expected_result)
     expect(ordered_items_names).to_not include(unordered_items)
