@@ -21,6 +21,10 @@ class Order < ApplicationRecord
     where("amount < ?", x)
   end
 
+  def self.orders_by_amount(sort_key = :asc)
+    order(amount: sort_key)
+  end
+
   def self.smallest_order_id
     order(:amount)
     .first
@@ -31,6 +35,10 @@ class Order < ApplicationRecord
     order(amount: :desc)
     .first
     .id
+  end
+
+  def items_by_name
+    items.order(:name)
   end
 
 end
